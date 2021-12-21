@@ -1,1 +1,1 @@
-imagedata formats plugin for reading PostScript files.
+imagedata format plugin for reading PostScript files.
