@@ -55,10 +55,10 @@ class PSPlugin(AbstractPlugin):
             self: format plugin instance
             f: file handle or filename (depending on self._need_local_file)
             opts: Input options (dict)
-            hdr: Header dict
+            hdr: Header
         Returns:
             Tuple of
-                hdr: Header dict
+                hdr: Header
                     Return values:
                         - info: Internal data for the plugin
                             None if the given file should not be included (e.g. raw file)
@@ -92,7 +92,7 @@ class PSPlugin(AbstractPlugin):
             image_list = list()
             for fname in sorted(os.listdir(tempdir)):
                 filename = os.path.join(tempdir, fname)
-                logger.debug("PSPlugin.read: call ITKPlugin {}".format(filename))
+                logger.debug("PSPlugin.read: call imageio.imread {}".format(filename))
                 img = imageio.imread(filename)
                 image_list.append(img)
         if len(image_list) < 1:
@@ -104,14 +104,14 @@ class PSPlugin(AbstractPlugin):
         for i, img in enumerate(image_list):
             logger.debug('read: img {} si {}'.format(img.shape, si.shape))
             si[i] = img
-        hdr['spacing'] = np.array([1,1,1])
+        hdr.spacing = (1.0, 1.0, 1.0)
         # Color space: RGB
-        hdr['photometricInterpretation'] = 'MONOCHROME2'
-        hdr['color'] = False
+        hdr.photometricInterpretation = 'MONOCHROME2'
+        hdr.color = False
         if self.driver == 'png16m' and si.shape[-1] == 3:
             # Photometric interpretation = 'RGB'
-            hdr['photometricInterpretation'] = 'RGB'
-            hdr['color'] = True
+            hdr.photometricInterpretation = 'RGB'
+            hdr.color = True
         if self.rotate == 90:
             si = np.rot90(si, axes=(1,2))
         # Let a single page be a 2D image
@@ -137,60 +137,60 @@ class PSPlugin(AbstractPlugin):
         Args:
             self: format plugin instance
             image_list: list with (info,img) tuples
-            hdr: Header dict
+            hdr: Header
             si: numpy array (multi-dimensional)
         Returns:
-            hdr: Header dict
+            hdr: Header
         """
 
         #super(PSPlugin, self)._set_tags(image_list, hdr, si)
 
         # Default spacing and orientation
-        hdr['spacing'] = np.array([1,1,1])
-        hdr['imagePositions'] = {}
-        hdr['imagePositions'][0] = np.array([0,0,0])
-        hdr['orientation'] = np.array([0,1,0,-1,0,0])
+        hdr.spacing = (1.0, 1.0, 1.0)
+        hdr.imagePositions = {}
+        hdr.imagePositions[0] = np.array([0,0,0])
+        hdr.orientation = np.array([0,1,0,-1,0,0])
 
         # Set tags
         axes = list()
         _actual_shape = si.shape
         _color = False
-        if 'color' in hdr and hdr['color']:
+        if hdr.color:
             _actual_shape = si.shape[:-1]
             _color = True
         _actual_ndim = len(_actual_shape)
         nz = 1
         axes.append(imagedata.axis.UniformLengthAxis(
             'row',
-            hdr['imagePositions'][0][1],
+            hdr.imagePositions[0][1],
             _actual_shape[-2],
-            hdr['spacing'][1])
+            hdr.spacing[1])
         )
         axes.append(imagedata.axis.UniformLengthAxis(
             'column',
-            hdr['imagePositions'][0][2],
+            hdr.imagePositions[0][2],
             _actual_shape[-1],
-            hdr['spacing'][2])
+            hdr.spacing[2])
         )
         if _actual_ndim > 2:
             nz = _actual_shape[-3]
             axes.insert(0, imagedata.axis.UniformLengthAxis(
                 'slice',
-                hdr['imagePositions'][0][0],
+                hdr.imagePositions[0][0],
                 nz,
-                hdr['spacing'][0])
+                hdr.spacing[0])
             )
         if _color:
             axes.append(imagedata.axis.VariableAxis(
                 'rgb',
                 ['r', 'g', 'b'])
             )
-        hdr['axes'] = axes
+        hdr.axes = axes
 
         tags = {}
         for slice in range(nz):
             tags[slice] = np.array([0])
-        hdr['tags'] = tags
+        hdr.tags = tags
         return
 
     def _convert_to_png(self, filename, tempdir, fname):

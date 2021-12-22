@@ -29,3 +29,4 @@ exclude load_data.py
 recursive-include data *.pdf
 recursive-include data *.ps
 recursive-include data *.zip
+recursive-include data *.mat

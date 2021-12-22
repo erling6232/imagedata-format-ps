@@ -13,6 +13,14 @@ import imagedata.formats
 from imagedata.series import Series
 # from .compare_headers import compare_headers
 
+from imagedata import plugins
+from imagedata_format_ps.psplugin import PSPlugin
+plugin_type = 'format'
+plugin_name = PSPlugin.name + 'format'
+class_name = PSPlugin.name
+pclass = PSPlugin
+plugins[plugin_type].append((plugin_name, class_name, pclass))
+
 
 class Test2DPSPlugin(unittest.TestCase):
     def setUp(self):
@@ -33,7 +41,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_read_single_file_gray")
     def test_read_single_file_gray(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages', 'A_Lovers_Complaint_1.ps'),
+            os.path.join('data', 'pages', 'A_Lovers_Complaint_1.ps'),
             'none',
             self.opts_gray)
         self.assertEqual(si1.input_format, 'ps')
@@ -43,7 +51,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_read_single_file")
     def test_read_single_file(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages', 'A_Lovers_Complaint_1.ps'),
+            os.path.join('data', 'pages', 'A_Lovers_Complaint_1.ps'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -53,8 +61,8 @@ class Test2DPSPlugin(unittest.TestCase):
     def test_read_two_files(self):
         si1 = Series(
             [
-                os.path.join('data', 'ps', 'pages', 'A_Lovers_Complaint_1.ps'),
-                os.path.join('data', 'ps', 'pages', 'A_Lovers_Complaint_2.ps')
+                os.path.join('data', 'pages', 'A_Lovers_Complaint_1.ps'),
+                os.path.join('data', 'pages', 'A_Lovers_Complaint_2.ps')
             ],
             'none',
             self.opts)
@@ -64,7 +72,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_read_single_directory")
     def test_read_single_directory(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages'),
+            os.path.join('data', 'pages'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -75,7 +83,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_read_large_file")
     def test_read_large_file(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'A_Lovers_Complaint.ps'),
+            os.path.join('data', 'A_Lovers_Complaint.ps'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -84,7 +92,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_zipread_single_file")
     def test_zipread_single_file(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages.zip?pages/A_Lovers_Complaint_1.ps'),
+            os.path.join('data', 'pages.zip?pages/A_Lovers_Complaint_1.ps'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -93,7 +101,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_zipread_two_files")
     def test_zipread_two_files(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages.zip?pages/A_Lovers_Complaint_[12].ps'),
+            os.path.join('data', 'pages.zip?pages/A_Lovers_Complaint_[12].ps'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -102,7 +110,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_zipread_a_directory")
     def test_zipread_a_directory(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages.zip?pages/'),
+            os.path.join('data', 'pages.zip?pages/'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -111,7 +119,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_zipread_all")
     def test_zipread_all(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages.zip'),
+            os.path.join('data', 'pages.zip'),
             'none',
             self.opts)
         self.assertEqual(si1.dtype, np.uint8)
@@ -120,7 +128,7 @@ class Test2DPSPlugin(unittest.TestCase):
     # @unittest.skip("skipping test_write_single_file")
     def test_write_single_file(self):
         si1 = Series(
-            os.path.join('data', 'ps', 'pages.zip?pages/A_Lovers_Complaint_1.ps'),
+            os.path.join('data', 'pages.zip?pages/A_Lovers_Complaint_1.ps'),
             'none',
             self.opts)
         try:
