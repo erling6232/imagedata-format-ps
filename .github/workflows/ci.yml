@@ -12,8 +12,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Set up ghostscript
       run: |
-        apt update
-        apt install ghostscript
+        sudo apt update
+        sudo apt install -y ghostscript
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
