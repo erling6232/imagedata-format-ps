@@ -19,7 +19,7 @@ Imagedata plugin for reading PostScript and PDF files.
 
 .. _buildstatus: https://github.com/erling6232/imagedata_format_ps/actions
 
-.. |coverage| image:: https://codecov.io/gh/erling6232/imagedata_format_ps/branch/master/graph/badge.svg?token=GT9KZV2TWT
+.. |coverage| image:: https://codecov.io/gh/erling6232/imagedata_format_ps/branch/master/graph/badge.svg?token=5D3JDRKXZV
     :alt: Coverage
     :target: https://codecov.io/gh/erling6232/imagedata_format_ps
 
