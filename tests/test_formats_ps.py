@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
+import sys
 import os.path
 import tempfile
 import numpy as np
@@ -14,6 +15,7 @@ from imagedata.series import Series
 # from .compare_headers import compare_headers
 
 from imagedata import plugins
+sys.path.append(os.path.abspath('src'))
 from imagedata_format_ps.psplugin import PSPlugin
 plugin_type = 'format'
 plugin_name = PSPlugin.name + 'format'
